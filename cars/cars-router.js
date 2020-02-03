@@ -26,3 +26,32 @@ router.get('/', (req, res) => {
       res.status(500).json({ message: 'Failed to retrieve cars' });
     });
 });
+
+router.get('/:vin', (req, res) => {
+    const { vin } = req.params;
+  
+    db('car-dealer').where({ vin }).first()
+      .then(car => {
+        res.json(car);
+      })
+      .catch(err => {
+        res.status(500).json({ message: 'Failed to retrieve car' });
+      });
+  });
+  
+  router.post('/', (req, res) => {
+    const fruitData = req.body;
+    db('car-dealer').insert(carData)
+      .then(ids => {
+        db('cars').where({ vin: vins[0] })
+          .then(newCar => {
+            res.status(201).json(newCar);
+          });
+      })
+      .catch(err => {
+        console.log('POST error', err);
+        res.status(500).json({ message: "Failed to store data" });
+      });
+  });
+  
+  module.exports = router;
